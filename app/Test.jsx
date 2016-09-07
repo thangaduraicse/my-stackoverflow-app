@@ -1,8 +1,30 @@
-import React from "react";
+import React, {Component} from "react";
 
-const Test = () =>
-	<div className="testcss">
-		<h1>It Works!</h1>
-	</div>;
+export default class Test extends Component {
 
-export default Test;
+  handleClick = () => {
+    $('.card-title').text("Card Title Clicked");
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <div className="row">
+          <div className="col s12 m6">
+            <div className="card blue-grey darken-1">
+              <div className="card-content white-text">
+                <span className="card-title testcss" onClick={this.handleClick}>Card Title</span>
+                <p>I am a very simple card. I am good at containing small bits of information.
+                I am convenient because I require little markup to use effectively.</p>
+              </div>
+              <div className="card-action">
+                <a href="https://github.com/thangaduraicse">This is a link</a>
+                <a href="#">This is a link</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}

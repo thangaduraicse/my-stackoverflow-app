@@ -41,28 +41,12 @@ module.exports = webpackMerge(commonConfig, {
         loaders: ['react-hot']
       },
       {
-        test: /[\/\\](node_modules)[\/\\].*\.css$/,
-        loaders: [
-          'style?sourceMap',
-          'css'
-        ]
-      },
-      {
         test: /\.scss$/,
-        exclude: /(node_modules)/,
-        loaders: [
-          'style?sourceMap',
-          'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]',
-          'sass'
-        ]
+        loaders: ['style', 'css', 'postcss', 'sass']
       },
       {
         test: /\.css$/,
-        exclude: /(node_modules)/,
-        loaders: [
-          'style?sourceMap',
-          'css?modules&importLoaders=1&localIdentName=[path]___[name]__[local]___[hash:base64:5]'
-        ]
+        loaders: ['style', 'css', 'postcss']
       }
     ]
   },

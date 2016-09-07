@@ -4,6 +4,7 @@
  * @author: Thangadurai Nainamalai<duraithanga3@gmail.com>
  */
 
+const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -18,53 +19,57 @@ module.exports = {
   resolve: {
     extensions: ['', '.js', '.jsx', '.json'],
     root: helpers.root('app'),
-    modulesDirectories: ['node_modules']
+    modulesDirectories: ['node_modules'],
+    alias: {
+      'materialize-scss': helpers.root('node_modules/materialize-css/sass/materialize.scss')
+    }
   },
 
   module: {
     loaders: [
       {
         test: /\.jsx?$/,
-        exclude: /(node_modules|bower_components|public)/,
+        exclude: /(node_modules|public)/,
         loader: 'babel'
       },
       {
         test: /\.json$/,
+        exclude: /(public)/,
         loader: 'json-loader'
       },
       {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        exclude: /(node_modules|bower_components)/,
+        test: /\.(eot|otf)(\?v=\d+\.\d+\.\d+)?$/,
+        exclude: /(public)/,
         loader: "file"
       },
       {
         test: /\.(woff|woff2)$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(public)/,
         loader: "url?prefix=font/&limit=5000"
       },
       {
         test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(public)/,
         loader: "url?limit=10000&mimetype=application/octet-stream"
       },
       {
         test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(public)/,
         loader: "url?limit=10000&mimetype=image/svg+xml"
       },
       {
         test: /\.gif/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(public)/,
         loader: "url-loader?limit=10000&mimetype=image/gif"
       },
       {
         test: /\.jpg/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(public)/,
         loader: "url-loader?limit=10000&mimetype=image/jpg"
       },
       {
         test: /\.png/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(public)/,
         loader: "url-loader?limit=10000&mimetype=image/png"
       }
     ]
@@ -81,6 +86,11 @@ module.exports = {
       to: 'assets'
     }]),
 
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
+    }),
     /*
      * Generate html tags based on javascript maps.
      *
@@ -96,6 +106,12 @@ module.exports = {
      */
     new CreateHtmlElements({
       headTags: require('./head-config.common')
+    })
+  ],
+
+  postcss: [
+    autoprefixer({
+      browsers: ['last 2 versions']
     })
   ],
 

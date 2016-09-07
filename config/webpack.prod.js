@@ -35,18 +35,12 @@ module.exports = webpackMerge(commonConfig, {
   module: {
     loaders: [
       {
-        test: /[\/\\](node_modules)[\/\\].*\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css')
-      },
-      {
         test: /\.scss$/,
-        exclude: /(node_modules)/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]', 'sass')
+        loader: ExtractTextPlugin.extract('style', 'css!postcss!sass')
       },
       {
         test: /\.css$/,
-        exclude: /(node_modules)/,
-        loader: ExtractTextPlugin.extract('style', 'css?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
+        loader: ExtractTextPlugin.extract('style', 'css!postcss')
       }
     ]
   },
