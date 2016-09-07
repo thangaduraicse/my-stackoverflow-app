@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= webpackConfig.metadata.title %></title>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="<%= webpackConfig.metadata.title %>">
+    <% if (webpackConfig.htmlElements.headTags) { %>
+      <%= webpackConfig.htmlElements.headTags %>
+    <% } %>
+  </head>
+  <body>
+    <div class="container">
+      <div id="root">Loading...</div>
+    </div>
+  </body>
+</html>

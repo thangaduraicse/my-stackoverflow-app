@@ -4,6 +4,15 @@
   "description": "React Redux Widget Sample",
   "main": "app/app.js",
   "scripts": {
+    "rimraf": "rimraf",
+    "webpack": "webpack",
+    "webpack-dev-server": "webpack-dev-server",
+    "clean": "npm cache clean && npm run rimraf -- node_modules public",
+    "clean:public": "npm run rimraf -- public",
+    "preclean:install": "npm run clean",
+    "clean:install": "npm set progress=false && npm install",
+    "build": "webpack --config config/webpack.prod.js --progress --profile --bail",
+    "start": "webpack-dev-server --config config/webpack.dev.js --progress --profile --watch",
     "lint": "eslint ."
   },
   "repository": {
@@ -24,7 +33,9 @@
   "homepage": "https://github.com/thangaduraicse/react-redux-webpack#readme",
   "dependencies": {
     "core-js": "^2.4.1",
+    "jquery": "^3.1.0",
     "lodash": "^4.15.0",
+    "materialize-css": "^0.97.7",
     "react": "^15.3.1",
     "react-addons-css-transition-group": "^15.3.1",
     "react-addons-update": "^15.3.1",

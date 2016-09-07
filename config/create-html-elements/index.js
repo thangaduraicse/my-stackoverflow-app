@@ -1,6 +1,6 @@
 /*
  * Refer: https://github.com/AngularClass/angular2-webpack-starter/blob/master/config/html-elements-plugin/index.js
- * @author: Thangadurai Nainamalai<Thanagdurai.N@cognizant.com>
+ * @author: Thangadurai Nainamalai<duraithanga3@gmail.com>
  */
 
 const RE_ENDS_WITH_BS = /\/$/;
