@@ -1,0 +1,25 @@
+{
+  "name": "react-widgets",
+  "version": "1.0.0",
+  "description": "React Redux Widget Sample",
+  "main": "app/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thangaduraicse/react-redux-webpack.git"
+  },
+  "keywords": [
+    "React",
+    "Redux",
+    "Webpack",
+    "HMR"
+  ],
+  "author": "Thangadurai Nainamalai <duraithanga3@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thangaduraicse/react-redux-webpack/issues"
+  },
+  "homepage": "https://github.com/thangaduraicse/react-redux-webpack#readme"
+}

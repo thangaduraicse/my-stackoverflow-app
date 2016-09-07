@@ -1,0 +1,16 @@
+*.log
+*.out
+*.pid
+*.seed
+*.sublime-*
+*.swo
+*.swp
+*.tgz
+*.xml
+*.orig
+.DS_Store
+.idea
+.project
+.bowerrc
+node_modules
+npm-debug.log
