@@ -11,6 +11,7 @@
     "clean:public": "npm run rimraf -- public",
     "preclean:install": "npm run clean",
     "clean:install": "npm set progress=false && npm install",
+    "prebuild": "npm run clean:public",
     "build": "webpack --config config/webpack.prod.js --progress --profile --bail",
     "start": "webpack-dev-server --config config/webpack.dev.js --progress --profile --watch",
     "lint": "eslint ."
