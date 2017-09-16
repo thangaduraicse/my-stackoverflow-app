@@ -1,11 +1,18 @@
 {
+  "presets": ["react", "env"],
+  "ignore": "node_modules",
   "plugins": [
-    "transform-runtime",
     "transform-decorators-legacy",
     "transform-class-properties"
   ],
-  "presets": [
-    "react",
-    "es2015"
-  ]
+  "env": {
+    "production": {
+      "plugins": [
+        "transform-decorators-legacy",
+        "transform-class-properties",
+        "transform-react-constant-elements",
+        "transform-react-remove-prop-types"
+      ]
+    }
+  }
 }

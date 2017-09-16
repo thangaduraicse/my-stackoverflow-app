@@ -8,6 +8,15 @@
     "node": true,
     "es6": true
   },
+  "globals": {
+    "_": true,
+    "lod": true,
+    "fetch": true,
+    "moment": true,
+    "React": true,
+    "ReactDOM": true,
+    "PropTypes": true
+  },
   "parser": "babel-eslint",
   "settings": {
     "react": {
@@ -74,7 +83,6 @@
     "react/jsx-uses-react": 2,
     "react/jsx-no-undef": 2,
     "react/self-closing-comp": 2,
-    "react/wrap-multilines": 2,
     "react/jsx-equals-spacing": [2, "never"],
     "react/no-danger": 1
   }

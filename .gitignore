@@ -12,6 +12,12 @@
 .idea
 .project
 .bowerrc
+node_cache
 node_modules
-npm-debug.log
-public
+npm-debug.*
+dist
+esdoc
+coverage
+lint-reports
+.nyc-output
+records.json

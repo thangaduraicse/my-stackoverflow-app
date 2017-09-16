@@ -1,6 +1,0 @@
-{
-  "eslint": {
-    "reference_url": "http://eslint.org/docs/rules/",
-    "npm": "[eslint, eslint-config-defaults, babel-eslint, eslint-plugin-react]"
-  }
-}

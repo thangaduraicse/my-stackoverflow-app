@@ -1,5 +1,4 @@
 /*
- * Refer: https://github.com/AngularClass/angular2-webpack-starter/blob/master/config/html-elements-plugin/index.js
  * @author: Thangadurai Nainamalai<duraithanga3@gmail.com>
  */
 

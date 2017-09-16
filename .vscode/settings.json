@@ -1,0 +1,25 @@
+{
+  "javascript.validate.enable": false,
+  "typescript.validate.enable": false,
+  "editor.tabSize": 2,
+  "editor.rulers": [
+    80, 100, 120
+  ],
+  "eslint.enable": true,
+  "eslint.workingDirectories": [
+    "./"
+  ],
+  "eslint.nodePath": "./node_modules",
+  "eslint.options": {
+    "configFile": "./.eslintrc.json"
+  },
+  "editor.wordWrap": true,
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/.DS_Store": true,
+    "**/node_cache": true,
+    "**/node_modules": true
+  }
+}
