@@ -8,7 +8,7 @@ const env = isProduction ? "production" : "development";
 const data = require("./package.json");
 
 const OUTPUT_PATH = process.env.OUTPUT_PATH || "./dist";
-const VERSION = data && data.version ? data.vesion : "0.0.1";
+const VERSION = data && data.version ? data.version : "0.0.1";
 
 const DEVPORT = 3000;
 
@@ -70,6 +70,10 @@ webpackPlugins = webpackPlugins.concat([
     "PropTypes": "prop-types"
   }),
   new webpack.optimize.CommonsChunkPlugin({
+    name: "polyfills",
+    chunks: ["polyfills"]
+  }),
+  new webpack.optimize.CommonsChunkPlugin({
     name: "module",
     chunks: ["app"],
     minChunks: module => /node_modules/.test(module.resource)
@@ -95,9 +99,18 @@ webpackPlugins = webpackPlugins.concat([
     title: "My Stackoverflow App",
     basePath: "/",
     template: path.resolve(__dirname, "./template/html.ejs"),
-    chunksSortMode: "dependency"
+    chunksSortMode: (a, b) => {
+      const entries = ["polyfills", "module", "app"];
+      return entries.indexOf(a.names[0]) - entries.indexOf(b.names[0])
+    },
+    inject: "body"
   }),
-  new ScriptExtHtmlWebpackPlugin(),
+  new ScriptExtHtmlWebpackPlugin({
+    sync: /polyfills|module/,
+    defaultAttribute: "async",
+    preload: [/polyfills|module|app/],
+    prefetch: [/chunk/]
+  }),
   /*
    * Generate html tags based on javascript maps.
    *
@@ -180,11 +193,11 @@ const router = jsonServer.router("db.json");
 
 module.exports = {
   entry: {
+    polyfills: "babel-polyfill",
     app: (isProduction ? [] : [
       `webpack-dev-server/client?http://localhost:${DEVPORT}`,
       "webpack/hot/only-dev-server"
     ]).concat([
-      "babel-polyfill",
       path.resolve(__dirname, "./src/index")
     ])
   },
