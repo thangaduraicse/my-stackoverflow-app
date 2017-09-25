@@ -3,8 +3,8 @@
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:jsx-a11y/recommended",
-    "plugin:imports/errors",
-    "plugin:imports/warnings"
+    "plugin:import/errors",
+    "plugin:import/warnings"
   ],
   "plugins": [
     "react",
