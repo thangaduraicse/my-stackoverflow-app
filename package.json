@@ -10,7 +10,8 @@
     "lint": "eslint src",
     "lint:report": "eslint src -f html -o ./lint-reports/result.html",
     "test": "nyc --reporter html mocha --reporter spec --ui mocha-cucumber test/helper.js \"test/**/*.test.js\"",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "esdoc": "esdoc -c esdoc.json"
   },
   "repository": {
     "type": "git",
@@ -45,6 +46,9 @@
     "cross-env": "5.0.5",
     "css-loader": "0.28.7",
     "enzyme": "2.9.1",
+    "esdoc": "1.0.3",
+    "esdoc-ecmascript-proposal-plugin": "1.0.0",
+    "esdoc-standard-plugin": "1.0.0",
     "eslint": "4.7.2",
     "eslint-loader": "1.9.0",
     "eslint-plugin-import": "2.7.0",
