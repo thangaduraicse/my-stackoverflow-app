@@ -217,7 +217,7 @@ module.exports = {
       test: /\.css$/,
       use: cssLoaders
     }, {
-      test: /\.sass$/,
+      test: /\.scss$/,
       use: sassLoaders
     }, {
       test: /\.(eot|otf|woff|woff2|ttf)(\?v=\d+\.\d+\.\d+)?$/,

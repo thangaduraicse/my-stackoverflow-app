@@ -1,0 +1,20 @@
+header {
+  .page-header {
+    margin-bottom: 0px;
+  }
+  .navbar {
+    &.navbar-default {
+      border: 0 none;
+      box-shadow: none;
+    }
+    .nav {
+      &.navbar-nav {
+        a {
+          &.active {
+            background-color: #ccc;
+          }
+        }
+      }
+    }
+  }
+}

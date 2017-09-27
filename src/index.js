@@ -1,5 +1,8 @@
 import Routes from "./routes";
 
+import "bootstrap/dist/css/bootstrap.css";
+import "./SCSS/index.scss";
+
 const rootElement = document.getElementById("root");
 
 ReactDOM.render(<Routes />, rootElement);
