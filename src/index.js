@@ -1,6 +1,7 @@
 import Routes from "./routes";
 
 import "bootstrap/dist/css/bootstrap.css";
+import "react-widgets/lib/scss/react-widgets.scss";
 import "./SCSS/index.scss";
 
 const rootElement = document.getElementById("root");
