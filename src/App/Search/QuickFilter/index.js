@@ -1,16 +1,21 @@
 import {Grid, Row, Col} from "react-bootstrap";
 import InputGroup from "../Components/InputGroup";
-import Query from "../Query";
 
 export default class QuickFilter extends React.Component {
   static get propTypes() {
     return {
+      defaultSearchQuery: PropTypes.object.isRequired,
       queryCallback: PropTypes.func.isRequired
     };
   }
   /* eslint-disable no-console */
   static get defaultProps() {
     return {
+      defaultSearchQuery: {
+        order: "desc",
+        sort: "activity",
+        site: "stackoverflow"
+      },
       queryCallback: (query) => (
         console.log("Quick Filter Query Callback...", query)
       )
@@ -20,11 +25,7 @@ export default class QuickFilter extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      jsonQuery: {
-        order: "desc",
-        sort: "activity",
-        site: "stackoverflow"
-      }
+      jsonQuery: props.defaultSearchQuery
     };
   }
   onFieldGroupChange = (cb) => {
@@ -43,12 +44,10 @@ export default class QuickFilter extends React.Component {
     }, () => (this.props.queryCallback({query: jsonQuery})));
   }
   render() {
-    const {jsonQuery} = this.state;
     return (
-      <Row className="quick-filter">
-        <Grid>
-          <Query query={ jsonQuery } />
-          <Row>
+      <Row className="search-quick-filter">
+        <Grid>          
+          <Row className="spaced">
             <Col xs={ 12 }>
               <InputGroup 
                 id="q" 

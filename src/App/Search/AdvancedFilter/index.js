@@ -2,7 +2,6 @@ import {Grid, Row, Col} from "react-bootstrap";
 import InputGroup from "../Components/InputGroup";
 import CalendarGroup from "../Components/CalendarGroup";
 import DropdownGroup from "../Components/DropdownGroup";
-import Query from "../Query";
 import Constants from "./Constants";
 
 export default class AdvancedFilter extends React.Component {
@@ -15,7 +14,11 @@ export default class AdvancedFilter extends React.Component {
   /* eslint-disable no-console */
   static get defaultProps() {
     return {
-      defaultSearchQuery: {},
+      defaultSearchQuery: {
+        order: "desc",
+        sort: "activity",
+        site: "stackoverflow"
+      },
       queryCallback: (query) => (
         console.log("Advanced Filter Query Callback...", query)
       )
@@ -47,9 +50,8 @@ export default class AdvancedFilter extends React.Component {
     const {defaultSearchQuery: searchQuery} = this.props;
     const {jsonQuery} = this.state;
     return (
-      <Row className="advanced-filter">
+      <Row className="search-advanced-filter">
         <Grid>
-          <Query query={ jsonQuery } />
           <Row className="spaced">
             <form>
               <Col lg={ 3 } md={ 4 } sm={ 6 } xs={ 12 }>
@@ -79,6 +81,7 @@ export default class AdvancedFilter extends React.Component {
                   className="date-type"
                   defaultValue={ searchQuery.fromdate }
                   onCalendarChange={ this.onFieldGroupChange } 
+                  shouldReturnTimestamp
                 />
               </Col>
               <Col lg={ 3 } md={ 4 } sm={ 6 } xs={ 12 }>
@@ -88,6 +91,7 @@ export default class AdvancedFilter extends React.Component {
                   className="date-type"
                   defaultValue={ searchQuery.todate }
                   onCalendarChange={ this.onFieldGroupChange } 
+                  shouldReturnTimestamp
                 />
               </Col>
               <Col lg={ 3 } md={ 4 } sm={ 6 } xs={ 12 }>
@@ -121,6 +125,7 @@ export default class AdvancedFilter extends React.Component {
                         className="date-type"
                         defaultValue={ searchQuery.min }
                         onCalendarChange={ this.onFieldGroupChange } 
+                        shouldReturnTimestamp
                       />
                     </Col>
                     <Col lg={ 3 } md={ 4 } sm={ 6 } xs={ 12 }>
@@ -130,6 +135,7 @@ export default class AdvancedFilter extends React.Component {
                         className="date-type"
                         defaultValue={ searchQuery.max }
                         onCalendarChange={ this.onFieldGroupChange } 
+                        shouldReturnTimestamp
                       />
                     </Col>
                   </div>

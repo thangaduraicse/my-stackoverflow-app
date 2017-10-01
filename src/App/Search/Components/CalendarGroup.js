@@ -11,7 +11,9 @@ export default class CalendarGroup extends React.Component {
       defaultValue: PropTypes.string,
       onCalendarChange: PropTypes.func,
       className: PropTypes.string,
-      format: PropTypes.string
+      format: PropTypes.string,
+      shouldReturnTimestamp: PropTypes.bool,
+      timestampFormat: PropTypes.string
     };
   }
   static get defaultProps() {
@@ -20,26 +22,54 @@ export default class CalendarGroup extends React.Component {
       defaultValue: "",
       onCalendarChange: (value) => ({}),
       className: "",
-      format: "YYYY-MM-DD"
+      format: "YYYY-MM-DD",
+      shouldReturnTimestamp: false,
+      timestampFormat: "X"
     };
   }
   constructor(props, context) {
     super(props, context);
+    const defaultDate = this.getDefaultValue(props);
     this.state = {
-      date: props.defaultValue === "" ? null : 
-        moment(props.defaultValue)
+      date: defaultDate
     };
   }
   componentWillReceiveProps(newProps) {
-    if (newProps.defaultValue !== "") {
+    if (this.props.defaultValue !== newProps.defaultValue) {
+      const defaultDate = this.getDefaultValue(newProps);
       this.setState({
-        date: moment(newProps.defaultValue)
+        date: defaultDate
       });
     }
   }
+  getDefaultValue = props => {
+    const {
+      shouldReturnTimestamp, 
+      timestampFormat, 
+      defaultValue, 
+      format
+    } = props;
+    let date = null;
+    if (defaultValue !== "") {
+      if (shouldReturnTimestamp) {
+        const timestamp = moment(defaultValue, timestampFormat);
+        date = timestamp.isValid() ? timestamp : null;
+      } else {
+        const defaultDate = moment(defaultValue, format);
+        date = defaultDate.isValid() ? defaultDate : null;
+      }
+    }
+    return date;
+  }
   handleChange = date => {
     this.setState({date}, () => {
-      const newDate = moment(date).format(this.props.format);
+      const {format, timestampFormat, shouldReturnTimestamp} = this.props;
+      let newDate = "";
+      if (date && shouldReturnTimestamp) {
+        newDate = moment(date).format(timestampFormat);
+      } else if (date) {
+        newDate = moment(date).format(format);
+      }
       this.props.onCalendarChange({
         [this.props.id]: newDate
       });

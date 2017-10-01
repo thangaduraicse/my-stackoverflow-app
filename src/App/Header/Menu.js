@@ -11,6 +11,9 @@ const Menu = () => (
       <li role="presentation">
         <NavLink exact to="/search">Search</NavLink>
       </li>
+      <li role="presentation">
+        <NavLink exact to="/results">Results</NavLink>
+      </li>
     </ul>
   </Navbar>
 );

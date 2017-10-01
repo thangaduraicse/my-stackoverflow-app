@@ -63,7 +63,7 @@ webpackPlugins = webpackPlugins.concat([
   new webpack.ProvidePlugin({
     "_": "lodash",
     "lod": "lodash",
-    "fetch": "isomorphic-fetch",
+    "fetch": "imports?this=>global!exports?global.fetch!whatwg-fetch",
     "moment": "moment",
     "React": "react",
     "ReactDOM": "react-dom",

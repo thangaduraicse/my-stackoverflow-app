@@ -46,21 +46,22 @@ export default class DropdownGroup extends React.Component {
     const {valueField, data, defaultValue} = props;
     data.map((menu, index) => {
       if (menu[valueField] === defaultValue) {
-        this.onSelectMenu(menu, index);
+        this.setSelectedMenu(menu, index);
         return;
       }
     });
   }
-  onSelectMenu = (selected, menuIndex) => {
+  setSelectedMenu = (menu, index) => {
     const newArray = new Array(this.props.data.length);
     let activeStatus = newArray.fill(false);
-    activeStatus[menuIndex] = true;
-
-    this.setState({selected, activeStatus}, () => {
-      const {valueField, onDropdownChange, id} = this.props;
-      onDropdownChange({
-        [id]: selected[valueField]
-      });
+    activeStatus[index] = true;
+    return this.setState({selected: menu, activeStatus});
+  }
+  onSelectMenu = (selected, menuIndex) => {
+    const {valueField, onDropdownChange, id} = this.props;
+    this.setSelectedMenu(selected, menuIndex);
+    onDropdownChange({
+      [id]: selected[valueField]
     });
   }
   renderMenuItem = () => {

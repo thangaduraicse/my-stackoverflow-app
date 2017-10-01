@@ -1,33 +1,29 @@
 import {Row, Col, Button} from "react-bootstrap";
 
-const jsonToQueryString = (apiUrl, queryJson) => {
-  const queryParams = Object.keys(queryJson).map(key => {
-    return `${encodeURIComponent(key)}=${encodeURIComponent(queryJson[key])}`;
-  }).join("&");
-  return `${apiUrl}?${queryParams}`;
-};
-
 const Query = (props) => {
   const {apiUrl, query, onRun} = props;
 
-  const searchQuery = jsonToQueryString(apiUrl, query);
+  const queryParams = Object.keys(query).map(key => 
+    `${encodeURIComponent(key)}=${encodeURIComponent(query[key])}`
+  ).join("&");
+  const searchQuery = `${apiUrl}?${queryParams}`;
 
   return (
-    <Row>
-      <Col xs={ 12 } className="spaced">
-        <pre className="fetched-url">
-          <div className="text-left">
-            <h6><u>Search URL:</u></h6>
-            <code>
-              <a href={ searchQuery } target="_blank">{searchQuery}</a>
-            </code>
-          </div>
-          <div className="text-right">
-            <Button 
-              onClick={ () => onRun(searchQuery) }
-              bsStyle="warning"
-            >Run</Button>
-          </div>
+    <Row className="search-query">
+      <Col xs={ 12 }>
+        <pre>
+          <h6>
+            <u>Search URL:</u>
+            <div className="search-query-run-btn">
+              <Button 
+                onClick={ () => onRun(searchQuery) }
+                bsStyle="warning"
+              >Run</Button>
+            </div>
+          </h6>
+          <code>
+            <a href={ searchQuery } target="_blank">{searchQuery}</a>
+          </code>
         </pre>
       </Col>
     </Row>
