@@ -24,7 +24,16 @@ const filterOptions = (options, filterValue, props) => {
   });
 };
 
+const handleRequired = (value, multi) => {
+  if (!value) return true;
+  return (
+    multi ? value.length === Constants.ZERO : 
+      Object.keys(value).length === Constants.ZERO
+  );
+};
+
 export {
   Constants,
-  filterOptions
+  filterOptions,
+  handleRequired
 };
