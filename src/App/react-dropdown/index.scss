@@ -1,0 +1,306 @@
+$select-input-bg:                   #fff !default;
+$select-input-bg-disabled:          #f9f9f9 !default;
+$select-input-border-color:         #ccc !default;
+$select-input-border-radius:        4px !default;
+$select-input-border-focus:         #08c !default;
+$select-input-box-shadow-focus:     inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px -1px fade($select-input-border-focus, 50%) !default;
+$select-input-border-width:         1px !default;
+$select-input-height:               36px !default;
+$select-input-internal-height:      ($select-input-height - ($select-input-border-width * 2)) !default;
+$select-input-placeholder:          #aaa !default;
+$select-text-color:                 #333 !default;
+$select-link-hover-color:           $select-input-border-focus !default;
+$select-input-hover-box-shadow:     0 1px 0 rgba(0, 0, 0, 0.06) !default;
+$select-padding-vertical:           8px !default;
+$select-padding-horizontal:         10px !default;
+$select-menu-zindex:                1000 !default;
+$select-menu-max-height:            200px !default;
+$select-menu-box-shadow:            $select-input-hover-box-shadow !default;
+$select-option-color:               lighten($select-text-color, 20%) !default;
+$select-option-bg:                  $select-input-bg !default;
+$select-option-focused-color:       $select-text-color !default;
+$select-option-focused-bg:          #f2f9fc !default;
+$select-option-selected-color:      $select-text-color !default;
+$select-option-selected-bg:         #f5faff !default;
+$select-option-disabled-color:      lighten($select-text-color, 60%) !default;
+$select-noresults-color:            lighten($select-text-color, 40%) !default;
+$select-clear-size:                 floor(($select-input-height / 2)) !default;
+$select-clear-color:                #999 !default;
+$select-clear-hover-color:          #D0021B !default;
+$select-clear-width:                ($select-input-internal-height / 2) !default;
+$select-arrow-color:                #999 !default;
+$select-arrow-color-hover:          #666 !default;
+$select-arrow-width:                5px !default;
+$select-item-border-radius:         2px !default;
+$select-item-gutter:                5px !default;
+$select-item-padding-vertical:      2px !default;
+$select-item-padding-horizontal:    5px !default;
+$select-item-font-size:             .9em !default;
+$select-item-color:                 #08c !default;
+$select-item-bg:                    #f2f9fc !default;
+$select-item-border-color:          darken($select-item-bg, 10%) !default;
+$select-item-hover-color:           darken($select-item-color, 5%) !default;
+$select-item-hover-bg:              darken($select-item-bg, 5%) !default;
+$select-item-disabled-color:        #333 !default;
+$select-item-disabled-bg:           #fcfcfc !default;
+$select-item-disabled-border-color: darken($select-item-disabled-bg, 10%) !default;
+
+@mixin size($width, $height) {
+	width: $width;
+	height: $height;
+}
+@mixin square($size) {
+	@include size($size, $size);
+}
+@mixin border-top-radius($radius) {
+	border-top-right-radius: $radius;
+	border-top-left-radius: $radius;
+}
+@mixin border-right-radius($radius) {
+	border-bottom-right-radius: $radius;
+	border-top-right-radius: $radius;
+}
+@mixin border-bottom-radius($radius) {
+	border-bottom-right-radius: $radius;
+	border-bottom-left-radius: $radius;
+}
+@mixin border-left-radius($radius) {
+	border-bottom-left-radius: $radius;
+	border-top-left-radius: $radius;
+}
+@mixin animation($animation) {
+	-webkit-animation: $animation;
+	-o-animation: $animation;
+	animation: $animation;
+}
+@mixin box-sizing($boxmodel) {
+	-webkit-box-sizing: $boxmodel;
+	-moz-box-sizing: $boxmodel;
+	box-sizing: $boxmodel;
+}
+.Select {
+	position: relative;
+	&,
+	& div,
+	& input,
+	& span {
+		@include box-sizing(border-box);
+	}
+	&.is-disabled {
+		.Select-arrow-zone {
+			cursor: default;
+			pointer-events: none;
+		}
+		> .Select-control {
+			background-color: $select-input-bg-disabled;
+			&:hover {
+				box-shadow: none;
+			}
+		}
+	}
+	&.is-searchable {
+		&.is-open > .Select-control {
+			cursor: text;
+		}
+		&.is-focused:not(.is-open) > .Select-control {
+			cursor: text;
+		}
+	}
+	&.is-open > .Select-control {
+		@include border-bottom-radius( 0 );
+		background: $select-input-bg;
+		border-color: darken($select-input-border-color, 10%) $select-input-border-color lighten($select-input-border-color, 5%);
+		.Select-arrow {
+			top: -2px;
+			border-color: transparent transparent $select-arrow-color;
+			border-width: 0 $select-arrow-width $select-arrow-width;
+		}
+	}
+	&.is-focused:not(.is-open) > .Select-control {
+		border-color: $select-input-border-focus lighten($select-input-border-focus, 5%) lighten($select-input-border-focus, 5%);
+		box-shadow: $select-input-box-shadow-focus;
+	}
+	&.has-value.is-clearable > .Select-control .Select-value {
+		padding-right: ($select-clear-width + $select-arrow-width * 5);
+	}
+	&.has-value > .Select-control .Select-value,
+	&.has-value.is-pseudo-focused > .Select-control .Select-value {
+		.Select-value-label {
+			color: $select-text-color;
+		}
+		a.Select-value-label {
+			cursor: pointer;
+			text-decoration: none;
+			&:hover,
+			&:focus {
+				color: $select-link-hover-color;
+				outline: none;
+				text-decoration: underline;
+			}
+		}
+	}
+	&.has-value.is-pseudo-focused .Select-input {
+		opacity: 0;
+	}
+	&.is-open .Select-arrow,
+	.Select-arrow-zone:hover > .Select-arrow {
+		border-top-color: $select-arrow-color-hover;
+	}
+}
+.Select-control {
+	background-color: $select-input-bg;
+	border-color: lighten($select-input-border-color, 5%) $select-input-border-color darken($select-input-border-color, 10%);
+	border-radius: $select-input-border-radius;
+	border: $select-input-border-width solid $select-input-border-color;
+	color: $select-text-color;
+	cursor: default;
+	display: table;
+	border-spacing: 0;
+	border-collapse: separate;
+	height: $select-input-height;
+	outline: none;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+	&:hover {
+		box-shadow: $select-input-hover-box-shadow;
+	}
+	.Select-input:focus {
+		outline: none;
+	}
+}
+.Select-placeholder,
+.Select-control .Select-value {
+	bottom: 0;
+	color: $select-input-placeholder;
+	left: 0;
+	line-height: $select-input-internal-height;
+	padding-left: $select-padding-horizontal;
+	padding-right: $select-padding-horizontal;
+	position: absolute;
+	right: 0;
+	top: 0;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.Select-input {
+	height: $select-input-internal-height;
+	padding-left: $select-padding-horizontal;
+	padding-right: $select-padding-horizontal;
+	vertical-align: middle;
+	> input {
+		background: none transparent;
+		border: 0 none;
+		box-shadow: none;
+		cursor: default;
+		display: inline-block;
+		font-family: inherit;
+		font-size: inherit;
+		margin: 0;
+		outline: none;
+		line-height: 14px;
+		padding: (($select-input-internal-height - 14) / 2 - 2) 0 (($select-input-internal-height - 14) / 2 + 2);
+		-webkit-appearance: none;
+		.is-focused & {
+			cursor: text;
+		}
+	}
+}
+.Select-control:not(.is-searchable) > .Select-input {
+	outline: none;
+}
+.Select-clear-zone {
+	@include animation( Select-animation-fadeIn 200ms );
+	color: $select-clear-color;
+	cursor: pointer;
+	display: table-cell;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	width: $select-clear-width;
+	&:hover {
+		color: $select-clear-hover-color;
+	}
+}
+.Select-clear {
+	display: inline-block;
+	font-size: $select-clear-size;
+	line-height: 1;
+}
+.Select-arrow-zone {
+	cursor: pointer;
+	display: table-cell;
+	position: relative;
+	text-align: center;
+	vertical-align: middle;
+	width: ($select-arrow-width * 5);
+	padding-right: $select-arrow-width;
+}
+.Select-arrow {
+	border-color: $select-arrow-color transparent transparent;
+	border-style: solid;
+	border-width: $select-arrow-width $select-arrow-width ($select-arrow-width / 2);
+	display: inline-block;
+	height: 0;
+	width: 0;
+	position: relative;
+}
+@-webkit-keyframes Select-animation-fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+@keyframes Select-animation-fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+.Select-menu-outer {
+	@include border-bottom-radius( $select-input-border-radius );
+	background-color: $select-input-bg;
+	border: 1px solid $select-input-border-color;
+	border-top-color: mix($select-input-bg, $select-input-border-color, 50%);
+	box-shadow: $select-menu-box-shadow;
+	box-sizing: border-box;
+	margin-top: -1px;
+	max-height: $select-menu-max-height;
+	position: absolute;
+	top: 100%;
+	width: 100%;
+	z-index: $select-menu-zindex;
+	-webkit-overflow-scrolling: touch;
+}
+.Select-menu {
+	max-height: ($select-menu-max-height - 2px);
+	overflow-y: auto;
+}
+.Select-option {
+	box-sizing: border-box;
+	background-color: $select-option-bg;
+	color: $select-option-color;
+	cursor: pointer;
+	display: block;
+	padding: $select-padding-vertical $select-padding-horizontal;
+	&:last-child {
+		@include border-bottom-radius( $select-input-border-radius );
+	}
+	&.is-selected {
+		background-color: $select-option-selected-bg;
+		color: $select-option-selected-color;
+	}
+	&.is-focused {
+		background-color: $select-option-focused-bg;
+		color: $select-option-focused-color;
+	}
+	&.is-disabled {
+		color: $select-option-disabled-color;
+		cursor: default;
+	}
+}
+.Select-noresults {
+	box-sizing: border-box;
+	color: $select-noresults-color;
+	cursor: default;
+	display: block;
+	padding: $select-padding-vertical $select-padding-horizontal;
+}

@@ -1,1 +1,27 @@
-{}
+{
+  "dropdown-options": [{
+    "label": "Thangadurai",
+    "value": "Durai",
+    "email": "duraithanga3@gmail.com"
+  }, {
+    "label": "Paranthaman",
+    "value": "Paranthaman",
+    "email": "Paranthaman@gmail.com"
+  }, {
+    "label": "Nainamalai",
+    "value": "Nainamalai",
+    "email": "Nainamalai@gmail.com"
+  }, {
+    "label": "Gandhimathi",
+    "value": "Gandhimathi",
+    "email": "Gandhimathi@gmail.com"
+  }, {
+    "label": "Gopika",
+    "value": "Gopika",
+    "email": "Gopika@gmail.com"
+  }, {
+    "label": "Honnesha",
+    "value": "Honnesha",
+    "email": "Honnesha@gmail.com"
+  }]
+}

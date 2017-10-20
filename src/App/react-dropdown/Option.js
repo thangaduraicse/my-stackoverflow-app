@@ -122,7 +122,7 @@ export default class Option extends React.Component {
         >
           <Checkbox
             title={ option[labelKey] }
-            checked={ option.checked }
+            checked={ option.selected }
           >
             <div
               role="menu"
