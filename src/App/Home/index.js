@@ -29,7 +29,10 @@ export default class Home extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      results: null
+      results1: null,
+      results2: null,
+      results3: null,
+      results4: null
     };
   }
   componentDidMount() {
@@ -38,8 +41,8 @@ export default class Home extends React.Component {
   componentWillUnmount() {
     this.props.clearHomeStore();
   }
-  onChangeCallback = results => {
-    this.setState({results});
+  onChangeCallback = (results, key) => {
+    this.setState({[key]: results});
   }
   render() {
     const {isRequesting, options, error} = this.props;
@@ -52,12 +55,6 @@ export default class Home extends React.Component {
           </h2>
         </Col>
         <Col xs={ 12 }>
-          <pre>
-            Results:
-            <code>{JSON.stringify(this.state.results)}</code>
-          </pre>
-        </Col>
-        <Col md={ 3 } sm={ 4 } xs={ 12 }>
           <div>Single Select without searchable</div>
           {
             isRequesting ? null : options && options.length ? (
@@ -65,17 +62,21 @@ export default class Home extends React.Component {
                 options={ options }
                 labelKey="label"
                 valueKey="value"
-                onChange={ this.onChangeCallback }
-                value={ this.state.results }
-                multi
+                onChange={ r => this.onChangeCallback(r, "results1") }
+                value={ this.state.results1 }
               />
             ) : error && error.length ? (
               <div className="error">{error}</div>
             ) : null
           }
         </Col>
-        {/*}
-        <Col md={ 3 } sm={ 4 } xs={ 12 }>
+        <Col xs={ 12 }>
+          <pre>
+            Results:
+            <code>{JSON.stringify(this.state.results1)}</code>
+          </pre>
+        </Col>
+        <Col xs={ 12 }>
           <div>Single Select searchable</div>
           {
             isRequesting ? null : options && options.length ? (
@@ -83,16 +84,22 @@ export default class Home extends React.Component {
                 options={ options }
                 labelKey="label"
                 valueKey="value"
-                onChange={ this.onChangeCallback }
+                onChange={ r => this.onChangeCallback(r, "results2") }
                 searchable
-                value={ this.state.results }
+                value={ this.state.results2 }
               />
             ) : error && error.length ? (
               <div className="error">{error}</div>
             ) : null
           }
         </Col>
-        <Col md={ 3 } sm={ 4 } xs={ 12 }>
+        <Col xs={ 12 }>
+          <pre>
+            Results:
+            <code>{JSON.stringify(this.state.results2)}</code>
+          </pre>
+        </Col>
+        <Col xs={ 12 }>
           <div>Multi Select without searchable</div>
           {
             isRequesting ? null : options && options.length ? (
@@ -100,16 +107,22 @@ export default class Home extends React.Component {
                 options={ options }
                 labelKey="label"
                 valueKey="value"
-                onChange={ this.onChangeCallback }
+                onChange={ r => this.onChangeCallback(r, "results3") }
                 multi
-                value={ this.state.results }
+                value={ this.state.results3 }
               />
             ) : error && error.length ? (
               <div className="error">{error}</div>
             ) : null
           }
         </Col>
-        <Col md={ 3 } sm={ 4 } xs={ 12 }>
+        <Col xs={ 12 }>
+          <pre>
+            Results:
+            <code>{JSON.stringify(this.state.results3)}</code>
+          </pre>
+        </Col>
+        <Col xs={ 12 }>
           <div>Multi Select with searchable</div>
           {
             isRequesting ? null : options && options.length ? (
@@ -117,17 +130,22 @@ export default class Home extends React.Component {
                 options={ options }
                 labelKey="label"
                 valueKey="value"
-                onChange={ this.onChangeCallback }
+                onChange={ r => this.onChangeCallback(r, "results4") }
                 searchable
                 multi
-                value={ this.state.results }
+                value={ this.state.results4 }
               />
             ) : error && error.length ? (
               <div className="error">{error}</div>
             ) : null
           }
         </Col>
-        {*/}
+        <Col xs={ 12 }>
+          <pre>
+            Results:
+            <code>{JSON.stringify(this.state.results4)}</code>
+          </pre>
+        </Col>
       </Row>
     );
   }

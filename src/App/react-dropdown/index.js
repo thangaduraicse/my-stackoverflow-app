@@ -47,6 +47,8 @@ export default class Select extends React.Component {
       ]),
       delimiter: PropTypes.string,
       disabled: PropTypes.bool,
+      dropup: PropTypes.bool,
+      enableAutoPosition: PropTypes.bool,
       filterOption: PropTypes.func,
       inputProps: PropTypes.object,
       instanceId: PropTypes.string,
@@ -90,6 +92,7 @@ export default class Select extends React.Component {
       clearValueText: "Clear value",
       delimiter: ",",
       disabled: false,
+      enableAutoPosition: false,
       inputProps: {},
       labelKey: "label",
       multi: false,
@@ -111,7 +114,8 @@ export default class Select extends React.Component {
 			isFocused: false,
 			isOpen: false,
 			isPseudoFocused: false,
-			required: false,
+      required: false,
+      dropup: false
 		};
   }
   componentWillMount () {
@@ -236,7 +240,7 @@ export default class Select extends React.Component {
       return;
     }
     this.clearValue(e);		
-	}
+  }
 	handleMouseDown = e => {
     const {disabled, searchable} = this.props;
     if (disabled || (e.type === "mousedown" && e.button !== Constants.ZERO)) {
@@ -824,10 +828,12 @@ export default class Select extends React.Component {
 			focusedOption = this._focusedOption = null;
     }
 
+    const isDropup = this.props.dropup || this.state.dropup;
     const className = classNames("Select", this.props.className, {
       "is-disabled": disabled,
       "is-focused": isFocused,
       "is-open": isOpen,
+      "is-dropup": isDropup,
       "is-pseudo-focused": isPseudoFocused,
       "is-searchable": searchable,
       "has-value": valueArray.length

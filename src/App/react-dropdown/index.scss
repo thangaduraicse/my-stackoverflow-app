@@ -146,6 +146,10 @@ $select-item-disabled-border-color: darken($select-item-disabled-bg, 10%) !defau
 	.Select-arrow-zone:hover > .Select-arrow {
 		border-top-color: $select-arrow-color-hover;
 	}
+	&.dropup > .Select-menu-outer {
+		top: auto;
+		bottom: 100%;
+	}
 }
 .Select-control {
 	background-color: $select-input-bg;
