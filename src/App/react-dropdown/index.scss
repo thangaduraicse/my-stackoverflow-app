@@ -297,6 +297,10 @@ $select-item-disabled-border-color: darken($select-item-disabled-bg, 10%) !defau
 		cursor: default;
 	}
 }
+label.Select-option {
+	display: normal;
+	margin: 0;
+}
 .Select-noresults {
 	box-sizing: border-box;
 	color: $select-noresults-color;

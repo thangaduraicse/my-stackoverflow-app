@@ -14,14 +14,18 @@
   }, {
     "label": "Gandhimathi",
     "value": "Gandhimathi",
+    "disabled": true,
     "email": "Gandhimathi@gmail.com"
   }, {
     "label": "Gopika",
     "value": "Gopika",
+    "disabled": true,
     "email": "Gopika@gmail.com"
   }, {
     "label": "Honnesha",
     "value": "Honnesha",
+    "checked": true,
+    "disabled": true,
     "email": "Honnesha@gmail.com"
   }]
 }

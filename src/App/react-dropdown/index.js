@@ -1,81 +1,107 @@
 import classNames from "classnames";
 import Option from "./Option";
-import {Constants, handleRequired} from "./utils";
 import "./index.scss";
 
 let INSTANCE_ID = 1;
 
+const Constants = {
+  MINUS_ONE: -1,
+  ZERO: 0,
+  ONE: 1,
+  KEYBOARD_KEY: {
+    BACKSPACE: 8,
+    ENTER: 13,
+    ESCAPE: 27,
+    PAGE_UP: 33,
+    PAGE_DOWN: 34,
+    END: 35,
+    HOME: 36,
+    UP:38,
+    DOWN: 40,
+    DELETE: 46
+  }
+};
+
+function handleRequired(value, multi) {
+  if (!value) {
+    return true;
+  }
+  if (multi) {
+    return value.length === Constants.ZERO;
+  }
+  return Object.keys(value).length === Constants.ZERO;
+}
+
 export default class Select extends React.Component {
   static get propTypes () {
     return {
-      instanceId: PropTypes.number,
-      value: PropTypes.any,
-      required: PropTypes.bool,
-      multi: PropTypes.bool,
       autoFocus: PropTypes.bool,
+      className: PropTypes.string,
+      clearAllText: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.node,
+      ]),
+      clearValueText: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.node,
+      ]),
+      delimiter: PropTypes.string,
       disabled: PropTypes.bool,
-      searchable: PropTypes.bool,
-      onInputChange: PropTypes.func,
-      labelKey: PropTypes.string.isRequired,
-      valueKey: PropTypes.string.isRequired,
-      pageSize: PropTypes.number,
-      valueRenderer: PropTypes.func,
-      placeholder: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.string
-      ]),
-      showNumberOfItemsSelected: PropTypes.bool,
-      multiSelectedText: PropTypes.string,
+      filterOption: PropTypes.func,
       inputProps: PropTypes.object,
-      tabIndex: PropTypes.number,
-      noResultsText: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.string
-      ]),
-      optionClassName: PropTypes.string,
-      optionRenderer: PropTypes.func,
+      instanceId: PropTypes.string,
+      labelKey: PropTypes.string.isRequired,
       menuContainerStyle: PropTypes.object,
       menuStyle: PropTypes.object,
-      wrapperStyle: PropTypes.object,
-      style: PropTypes.object,
-      className: PropTypes.string,
-      clearAllText: PropTypes.string,
-      clearValueText: PropTypes.string,
-      options: PropTypes.arrayOf(PropTypes.object).isRequired,
-      onChange: PropTypes.func.isRequired,
+      multi: PropTypes.bool,
+      multiSelectedText: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.node,
+      ]),      
+      noResultsText: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.node,
+      ]),
+      onChange: PropTypes.func,
+      onInputChange: PropTypes.func,
+      optionClassName: PropTypes.string,
+      optionRenderer: PropTypes.func,
+      options: PropTypes.array.isRequired,
+      pageSize: PropTypes.number,
+      placeholder: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.node,
+      ]),
+      required: PropTypes.bool,
+      searchable: PropTypes.bool,
+      showNumberOfItemsSelected: PropTypes.bool,
       simpleValue: PropTypes.bool,
-      delimiter: PropTypes.string,
-      filterOption: PropTypes.func
+      style: PropTypes.object, 
+      tabIndex: PropTypes.string,
+      value: PropTypes.any,
+      valueKey: PropTypes.string.isRequired,
+      valueRenderer: PropTypes.func,
+      wrapperStyle: PropTypes.object
     };
   }
   static get defaultProps () {
     return {
-      required: false,
-      multi: false,
-      autoFocus: false,
+      clearAllText: "Clear all",
+      clearValueText: "Clear value",
+      delimiter: ",",
       disabled: false,
-      searchable: false,
-      labelKey: "label",
-      valueKey: "value",
-      pageSize: 5,
-      placeholder: "Select an option...",
-      showNumberOfItemsSelected: false,
-      multiSelectedText: "Multiple Selected",
       inputProps: {},
-      tabIndex: 0,
+      labelKey: "label",
+      multi: false,
+      multiSelectedText: "Multiple Selected",
       noResultsText: "No results found",
-      menuContainerStyle: {},
-      menuStyle: {},
-      wrapperStyle: {},
-      style: {},
-      clearAllText: "Clear All",
-      clearValueText: "Clear Value",
-      options: [],
-      /* eslint-disable no-console */
-      onChange: (value) => console.log("Selected value...", value),
-      /* eslint-enable no-console */
+      pageSize: 5,
+      placeholder: "Select...",
+      required: false,
+      searchable: false,
+      showNumberOfItemsSelected: false,
       simpleValue: false,
-      delimiter: ","
+      valueKey: "value"
     };
   }
   constructor (props, context) {
@@ -103,8 +129,8 @@ export default class Select extends React.Component {
 		if (this.props.autoFocus) {
 			this.focus();
 		}
-	}
-	componentWillReceiveProps (newProps) {
+  }
+  componentWillReceiveProps (newProps) {
     const {required} = this.props;
     const {required: newRequired} = newProps;
 		if (newRequired) {
@@ -116,7 +142,7 @@ export default class Select extends React.Component {
 		} else if (required) {
 			this.setState({required: false});
 		}
-	}
+  }	
 	componentWillUpdate (nextProps, nextState) {
     const {isOpen} = this.state;
     const {isOpen: newIsOpen} = nextState;
@@ -200,14 +226,16 @@ export default class Select extends React.Component {
 		this.dragging = false;
 	}
 	handleTouchEnd = e => {
-    if (!this.dragging) {
-      this.handleMouseDown(e);
-    }		
+    if (this.dragging) {
+      return;
+    }
+    this.handleMouseDown(e);
 	}
 	handleTouchEndClearValue = e => {
-    if (!this.dragging) {
-      this.clearValue(e);
-    }		
+    if (this.dragging) {
+      return;
+    }
+    this.clearValue(e);		
 	}
 	handleMouseDown = e => {
     const {disabled, searchable} = this.props;
@@ -389,27 +417,30 @@ export default class Select extends React.Component {
 	}
   getOptionLabel = op => {
 		const {searchable, labelKey} = this.props;
-		const item = op[labelKey];
-		if (searchable) {
-			const {disabled} = this.props;
-			const {inputValue} = this.state;
-			const start = item.toLowerCase().indexOf(inputValue.toLowerCase()),
-				end = start + inputValue.length;
-			let part1 = item.slice(Constants.ZERO, start),
-				part2 = item.slice(start, end),
-				part3 = item.slice(end);
-			if (disabled || op.disabled) {
-				part1 = item;
-				part2 = null;
-				part3 = null;
-			}
-			return (
-				<div>
-					{part1}<b>{part2}</b>{part3}
-				</div>
-			);
-		}
-		return item;
+    const item = op[labelKey];
+    if (item) {
+      if (searchable) {
+        const {disabled} = this.props;
+        const {inputValue} = this.state;
+        const start = item.toLowerCase().indexOf(inputValue.toLowerCase()),
+          end = start + inputValue.length;
+        let part1 = item.slice(Constants.ZERO, start),
+          part2 = item.slice(start, end),
+          part3 = item.slice(end);
+        if (disabled || op.disabled) {
+          part1 = item;
+          part2 = null;
+          part3 = null;
+        }
+        return (
+          <div>
+            {part1}<b>{part2}</b>{part3}
+          </div>
+        );
+      }
+      return item;
+    }
+    return null;
   }
   getValueArray = (value, nextProps) => {
 		const props = typeof nextProps === "object" ? nextProps : this.props;
@@ -426,20 +457,37 @@ export default class Select extends React.Component {
 		let expandedValue = this.expandValue(value, props);
 		return expandedValue ? [expandedValue] : [];
 	}
-  expandValue = (value, props) => {
+  expandValue = (value, props) => {    
 		const valueType = typeof value;
     if (valueType !== "string" && valueType !== "number" && 
       valueType !== "boolean") {
       return value;
     }
-		let {options, valueKey} = props;
-		if (options.length) {
-      for (let i = 0; i < options.length; i++) {
-        if (options[i][valueKey] === value) {
-          return options[i];
-        }
+    let {options, valueKey} = props;
+    if (!options) {
+      return null;
+    }
+    for (let i = 0; i < options.length; i++) {
+      if (options[i][valueKey] === value) {
+        return options[i];
       }
     }
+    return null;
+  }
+  setValue = value => {
+    const {multi, required, onChange, simpleValue, 
+      delimiter, valueKey} = this.props;
+		if (required) {
+			const required = handleRequired(value, multi);
+			this.setState({required});
+		}
+		if (typeof onChange === "function") {
+			if (simpleValue && value) {
+        value = multi ? value.map(i => i[valueKey]).join(delimiter) : 
+          value[valueKey];
+			}
+			onChange(value);
+		}
   }
   selectValue = value => {
     const {multi} = this.props;
@@ -475,21 +523,6 @@ export default class Select extends React.Component {
 				this.setValue(value);
 			});
     }
-  }
-  setValue = value => {
-    const {multi, required, onChange, simpleValue, 
-      delimiter, valueKey} = this.props;
-		if (required) {
-			const required = handleRequired(value, multi);
-			this.setState({required});
-		}
-		if (typeof onChange === "function") {
-			if (simpleValue && value) {
-        value = multi ? value.map(i => i[valueKey]).join(delimiter) : 
-          value[valueKey];
-			}
-			onChange(value);
-		}
   }
   clearValue = e => {
 		if (e && e.type === "mousedown" && e.button !== Constants.ZERO) {
@@ -574,46 +607,39 @@ export default class Select extends React.Component {
 		});
   }
   renderValue = valueArray => {
-    if (!valueArray.length) {
-			return !this.state.inputValue ? (
-        <div className="Select-placeholder">
-          {this.props.placeholder}
-        </div>
-       ) : null;
-    }
-    if (!this.state.inputValue) {
+		const renderLabel = this.props.valueRenderer || this.getOptionLabel;
 
-      const {multi, labelKey} = this.props;   
-      let contentTitle = null, valueContentEle = null;
-
-      if (multi && valueArray.length > Constants.ONE) {
-        const {showNumberOfItemsSelected, multiSelectedText} = this.props;
-        if (showNumberOfItemsSelected) {
-          valueContentEle = `${valueArray.length} ${multiSelectedText}`;
-        } else {
-          valueContentEle = multiSelectedText;
-        }
-        contentTitle = valueContentEle;
-      } else {
-        const {valueRenderer} = this.props;
-        const renderLabel = valueRenderer || this.getOptionLabel;
-        valueContentEle = renderLabel(valueArray[0]);
-        contentTitle = valueArray[0][labelKey];
-      }
-      return (
-        <div className="Select-value">
-          <span
-            className="Select-value-label"
-            aria-selected="true"
-            id={ this._instancePrefix + "-value-item" }
-            title={ contentTitle }
-          >
-            {valueContentEle}
-          </span>
-        </div>
-      );
+		if (!valueArray.length && !this.state.inputValue) {
+			return (
+				<div className="Select-placeholder">
+					{this.props.placeholder}
+				</div>
+			);
     }
-    return null;
+    
+    let renderValueEle = null;
+		if (!this.state.inputValue) {
+			if (this.props.multi && valueArray.length > Constants.ONE) {
+				const {showNumberOfItemsSelected, multiSelectedText} = this.props;
+				if (showNumberOfItemsSelected) {
+					renderValueEle = `${valueArray.length} ${multiSelectedText}`;
+				} else {
+					renderValueEle = multiSelectedText;
+				}
+			} else {
+				renderValueEle = renderLabel(valueArray[0]);
+			}
+		}
+    return (
+      <div className="Select-value">
+        <span
+          className="Select-value-label"
+          id={ this._instancePrefix + "-value-item" }
+        >
+          {renderValueEle}
+        </span>
+      </div>
+    );
 	}
 	renderInput = valueArray => {
 		const {inputProps, disabled, searchable} = this.props;
@@ -648,6 +674,28 @@ export default class Select extends React.Component {
 			</div>
 		);
   }
+  filterOptions() {
+		let filterValue = this.state.inputValue;
+		const options = this.props.options || [];
+		if (options.length) {
+			filterValue = filterValue.toLowerCase();
+			return options.filter(option => {
+				if (this.props.filterOption) {
+					return this.props.filterOption(option, filterValue);
+				}
+				if (!filterValue) {
+					return true;
+				}
+				const valueTest = String(option[this.props.valueKey]).toLowerCase();
+				const labelTest = String(option[this.props.labelKey]).toLowerCase();
+				return (
+          valueTest.indexOf(filterValue) >= Constants.ZERO ||
+          labelTest.indexOf(filterValue) >= Constants.ZERO
+				);
+			});
+		}
+		return options;
+	}
   onOptionRef = (ref, isFocused) => {
 		if (isFocused) {
 			this.focused = ref;
@@ -660,7 +708,7 @@ export default class Select extends React.Component {
     if (options && options.length) {
       const {labelKey, optionClassName, valueKey, multi} = this.props;
       
-      let optionRenderer = this.props.optionRenderer || this.getOptionLabel;
+      const optionRenderer = this.props.optionRenderer || this.getOptionLabel;
 
       menuItems = options.map((option, index) => {
         let isSelected = valueArray && 
@@ -677,15 +725,18 @@ export default class Select extends React.Component {
         return (
           <Option
             labelKey={ labelKey }
+            valueKey={ valueKey }
             multi={ multi }
             className={ optionClass }
             instancePrefix={ this._instancePrefix }
+            isDisabled={ option.disabled }
             isFocused={ isFocused }
+            isSelected={ isSelected }
             key={ `option-${index}-${option[valueKey]}` }
             onFocus={ this.focusOption }
             onSelect={ this.selectValue }
             option={ option }
-            index={ index }
+            optionIndex={ index }
             selected={ isSelected }
             ref={ ref => this.onOptionRef(ref, isFocused) }
           >
@@ -715,7 +766,7 @@ export default class Select extends React.Component {
       >
         <div
           ref={ ref => this.menu = ref }
-          role="listbox"
+          role="menu"
           tabIndex={ -1 }
           className="Select-menu"
           id={ `${this._instancePrefix}-list` }
@@ -753,49 +804,24 @@ export default class Select extends React.Component {
     }
     return null;		
   }
-  getFilterOptions = () => {
-    let {inputValue} = this.state;
-    const {options} = this.props;
-
-    if (options.length) {
-      const {valueKey, labelKey, filterOption} = this.props;
-      inputValue = inputValue.toLowerCase();
-      return options.filter(option => {
-        if (typeof filterOption === "function") {
-          return filterOption(option, inputValue);
-        }
-        if (!inputValue) {
-          return true;
-        }
-        const valueTest = String(option[valueKey]).toLowerCase();
-        const labelTest = String(option[labelKey]).toLowerCase();
-    
-        return (
-          valueTest.indexOf(inputValue) >= Constants.ZERO ||
-          labelTest.indexOf(inputValue) >= Constants.ZERO
-        );
-      });
-    }
-    return [];
-  }
   render () {
     const {value, multi, disabled, clearAllText, clearValueText} = this.props;
-    const {tabIndex, searchable, wrapperStyle, style} = this.props;
+    const {searchable, wrapperStyle, style} = this.props;
     let {isOpen, inputValue, isFocused, isPseudoFocused} = this.state;
 
-    const valueArray = this.getValueArray(value);
-    const options = this._visibleOptions = this.getFilterOptions();
+    let valueArray = this.getValueArray(value);
+    let options = this._visibleOptions = this.filterOptions();
 
-    if (multi && !options.length && valueArray.length && !inputValue) {
+		if (multi && !options.length && valueArray.length && !inputValue) {
       isOpen = false;
     }
 
-    const focusedOptionIndex = this.getFocusableOptionIndex(valueArray[0]);
-    let focusedOption = null;
-    if (focusedOptionIndex !== null) {
-      focusedOption = this._focusedOption = options[focusedOptionIndex];
-    } else {
-      focusedOption = this._focusedOption = null;
+		const focusedOptionIndex = this.getFocusableOptionIndex(valueArray[0]);
+		let focusedOption = null;
+		if (focusedOptionIndex !== null) {
+			focusedOption = this._focusedOption = options[focusedOptionIndex];
+		} else {
+			focusedOption = this._focusedOption = null;
     }
 
     const className = classNames("Select", this.props.className, {
@@ -823,7 +849,7 @@ export default class Select extends React.Component {
           onTouchEnd={ this.handleTouchEnd }
           onTouchStart={ this.handleTouchStart }
           onTouchMove={ this.handleTouchMove }
-          tabIndex={ tabIndex }
+          tabIndex="-1"
         >
           <span 
             className="Select-multi-value-wrapper" 
@@ -858,7 +884,7 @@ export default class Select extends React.Component {
           </span>
         </div>
         {
-          isOpen ? this.renderMenuItems(options, valueArray, focusedOption) : 
+          isOpen ? this.renderMenuItems(options, valueArray, focusedOption) :
             null
         }
       </div>

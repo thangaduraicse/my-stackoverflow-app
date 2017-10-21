@@ -29,7 +29,7 @@ export default class Home extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      results: []
+      results: null
     };
   }
   componentDidMount() {
@@ -66,12 +66,15 @@ export default class Home extends React.Component {
                 labelKey="label"
                 valueKey="value"
                 onChange={ this.onChangeCallback }
+                value={ this.state.results }
+                multi
               />
             ) : error && error.length ? (
               <div className="error">{error}</div>
             ) : null
           }
         </Col>
+        {/*}
         <Col md={ 3 } sm={ 4 } xs={ 12 }>
           <div>Single Select searchable</div>
           {
@@ -82,6 +85,7 @@ export default class Home extends React.Component {
                 valueKey="value"
                 onChange={ this.onChangeCallback }
                 searchable
+                value={ this.state.results }
               />
             ) : error && error.length ? (
               <div className="error">{error}</div>
@@ -98,6 +102,7 @@ export default class Home extends React.Component {
                 valueKey="value"
                 onChange={ this.onChangeCallback }
                 multi
+                value={ this.state.results }
               />
             ) : error && error.length ? (
               <div className="error">{error}</div>
@@ -115,12 +120,14 @@ export default class Home extends React.Component {
                 onChange={ this.onChangeCallback }
                 searchable
                 multi
+                value={ this.state.results }
               />
             ) : error && error.length ? (
               <div className="error">{error}</div>
             ) : null
           }
         </Col>
+        {*/}
       </Row>
     );
   }

@@ -1,81 +1,59 @@
-import {MenuItem, Checkbox} from "react-bootstrap";
+import {Checkbox} from "react-bootstrap";
 import classNames from "classnames";
 
 export default class Option extends React.Component {
   static get propTypes() {
     return {
-      labelKey: PropTypes.string.isRequired,
-      instancePrefix: PropTypes.string,
-      index: PropTypes.number.isRequired,
-      multi: PropTypes.bool,
+      children: PropTypes.node,
       className: PropTypes.string,
+      instancePrefix: PropTypes.string.isRequired,
+      isDisabled: PropTypes.bool,
       isFocused: PropTypes.bool,
+      isSelected: PropTypes.bool,
+      labelKey: PropTypes.string.isRequired,
+      multi: PropTypes.bool,
+      onFocus: PropTypes.func,
+      onSelect: PropTypes.func,
+      onUnfocus: PropTypes.func,
       option: PropTypes.object.isRequired,
-      onFocus: PropTypes.func.isRequired,
-      onSelect: PropTypes.func.isRequired,
-      children: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.arrayOf(PropTypes.node)
-      ])
+      optionIndex: PropTypes.number,
     };
   }
-  static get defaultProps() {
-    return {
-      labelKey: "label",
-      instancePrefix: "menu",
-      multi: false,
-      className: null,
-      isFocused: false,
-      option: {},
-      onFocus: (option, event) => ({}),
-      onSelect: (option, event) => ({}),
-      children: null
-    };
-  }
-
   constructor(props, context) {
     super(props, context);
   }
-
   blockEvent = e => {
     e.preventDefault();
     e.stopPropagation();
   }
-
   handleMouseDown = e => {
 		e.preventDefault();
 		e.stopPropagation();
 		this.props.onSelect(this.props.option, e);
   }
-
 	handleMouseEnter = e => {
 		this.onFocus(e);
 	}
-
 	handleMouseMove = e => {
 		this.onFocus(e);
 	}
-
   handleTouchStart = e => {
 		this.dragging = false;
 	}
-  
   handleTouchMove = e => {
 		this.dragging = true;
   }
-
   handleTouchEnd = e => {
-		if(this.dragging) return;
-
+		if(this.dragging) { 
+      return;
+    }
 		this.handleMouseDown(e);
 	}
-
 	onFocus = e => {
 		if (!this.props.isFocused) {
 			this.props.onFocus(this.props.option, e);
 		}
 	}
-
   render() {
     const {
       multi, 
@@ -83,7 +61,7 @@ export default class Option extends React.Component {
       children, 
       labelKey, 
       instancePrefix,
-      index
+      optionIndex
     } = this.props;
 
     let className = classNames(this.props.className, option.className);
@@ -91,85 +69,89 @@ export default class Option extends React.Component {
     if (multi) {
       if (option.disabled) {
         return (
-          <div
-            id={ `${instancePrefix}-option-${index}` }
+          <div 
+            role="menuitem"
+            tabIndex={ optionIndex }
             className={ className }
+            onMouseDown={ this.blockEvent }
+            onClick={ this.blockEvent }
+            onKeyUp={ this.blockEvent }
+            onKeyPress={ this.blockEvent }
+            onKeyDown={ this.blockEvent }
           >
             <Checkbox
+              id={ `${instancePrefix}-option-${optionIndex}` }
               title={ option[labelKey] }
-              disabled={ option.disabled }
               checked={ option.checked }
+              disabled
+              readOnly
             >
-              <div
-                role="menu"
-                onMouseDown={ e => this.blockEvent(e) }
-                onClick={ e => this.blockEvent(e) }
-                onKeyUp={ e => this.blockEvent(e) }
-                onKeyPress={ e => this.blockEvent(e) }
-                onKeyDown={ e => this.blockEvent(e) }
-                tabIndex={ index }
-              >
-                {children}
-              </div>
+              {children}
             </Checkbox>
           </div>
         );
       }
       return (
-        <div
-          id={ `${instancePrefix}-option-${index}` }
+        <label 
+          role="presentation"
+          tabIndex={ optionIndex }
+          style={ option.style }
+          onMouseDown={ this.handleMouseDown }
+          onMouseEnter={ this.handleMouseEnter }
+          onMouseMove={ this.handleMouseMove }
+          onTouchStart={ this.handleTouchStart }
+          onTouchMove={ this.handleTouchMove }
+          onTouchEnd={ this.handleTouchEnd }
           className={ className }
+          htmlFor={ `${instancePrefix}-option-${optionIndex}` }
         >
-          <Checkbox
-            title={ option[labelKey] }
-            checked={ option.selected }
-          >
-            <div
-              role="menu"
-              onMouseDown={ e => this.handleMouseDown(e) }
-              onMouseEnter={ e => this.handleMouseEnter(e) }
-              onMouseMove={ e => this.handleMouseMove(e) }
-              onTouchStart={ e => this.handleTouchStart(e) }
-              onTouchMove={ e => this.handleTouchMove(e) }
-              onTouchEnd={ e => this.handleTouchEnd(e) }
-              tabIndex={ index }
-            >
-              {children}
-            </div>
-          </Checkbox>
-        </div>
+          <input
+            type="checkbox"
+            id={ `${instancePrefix}-option-${optionIndex}` }
+            checked={ option.checked }
+            readOnly
+          />
+          {children}
+        </label>
       );
     }
 
     if (option.disabled) {
       return (
-        <MenuItem
-          id={ `${instancePrefix}-option-${index}` }
+        <div 
+          role="menuitem"
+          tabIndex={ optionIndex }
+          id={ `${instancePrefix}-option-${optionIndex}` }
           className={ className }
-          onMouseDown={ e => this.blockEvent(e) }
-          onClick={ e => this.blockEvent(e) }
-          disabled
+          onMouseDown={ this.blockEvent }
+          onClick={ this.blockEvent }
+          onKeyUp={ this.blockEvent }
+          onKeyPress={ this.blockEvent }
+          onKeyDown={ this.blockEvent }
+          title={ option[labelKey] }
         >
           {children}
-        </MenuItem>
+        </div>
       );
     }
 
     return (
-      <MenuItem
-        id={ `${instancePrefix}-option-${index}` }
+      <div 
+        role="menuitem"
+        tabIndex={ optionIndex }
+        id={ `${instancePrefix}-option-${optionIndex}` }
         className={ className }
-        onMouseDown={ e => this.handleMouseDown(e) }
-        onMouseEnter={ e => this.handleMouseEnter(e) }
-        onMouseMove={ e => this.handleMouseMove(e) }
-        onTouchStart={ e => this.handleTouchStart(e) }
-        onTouchMove={ e => this.handleTouchMove(e) }
-        onTouchEnd={ e => this.handleTouchEnd(e) }
         style={ option.style }
+        onMouseDown={ this.handleMouseDown }
+        onMouseEnter={ this.handleMouseEnter }
+        onMouseMove={ this.handleMouseMove }
+        onTouchStart={ this.handleTouchStart }
+        onTouchMove={ this.handleTouchMove }
+        onTouchEnd={ this.handleTouchEnd }
         title={ option[labelKey] }
       >
         {children}
-      </MenuItem>
+      </div>
     );
   }
 }
