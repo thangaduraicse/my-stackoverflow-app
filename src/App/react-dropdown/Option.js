@@ -1,4 +1,3 @@
-import {Checkbox} from "react-bootstrap";
 import classNames from "classnames";
 
 export default class Option extends React.Component {
@@ -69,26 +68,27 @@ export default class Option extends React.Component {
     if (multi) {
       if (option.disabled) {
         return (
-          <div 
-            role="menuitem"
+          <label 
+            role="presentation"
             tabIndex={ optionIndex }
-            className={ className }
+            style={ option.style }
             onMouseDown={ this.blockEvent }
             onClick={ this.blockEvent }
             onKeyUp={ this.blockEvent }
             onKeyPress={ this.blockEvent }
             onKeyDown={ this.blockEvent }
+            className={ className }
+            htmlFor={ `${instancePrefix}-option-${optionIndex}` }
           >
-            <Checkbox
+            <input
+              type="checkbox"
               id={ `${instancePrefix}-option-${optionIndex}` }
-              title={ option[labelKey] }
               checked={ option.checked }
-              disabled
               readOnly
-            >
-              {children}
-            </Checkbox>
-          </div>
+              disabled
+            />
+            {children}
+          </label>
         );
       }
       return (
