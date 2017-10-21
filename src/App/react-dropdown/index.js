@@ -1,3 +1,4 @@
+import {Dropdown} from "react-bootstrap";
 import classNames from "classnames";
 import Option from "./Option";
 import "./index.scss";
@@ -191,7 +192,8 @@ export default class Select extends React.Component {
 			}
     }
 		if (this.menuContainer) {
-			let menuContainerRect = this.menuContainer.getBoundingClientRect();
+      let menuContainerRect = ReactDOM.findDOMNode(this.menuContainer)
+        .getBoundingClientRect();
 			if (window.innerHeight < menuContainerRect.bottom) {
 				window.scrollBy(
           Constants.ZERO, 
@@ -763,23 +765,23 @@ export default class Select extends React.Component {
     const {menuContainerStyle, menuStyle} = this.props;
 
     return (
-      <div
+      <Dropdown.Menu
         ref={ ref => this.menuContainer = ref }
-        className="Select-menu-outer"
+        key={ 1 }
+        onSelect={ null }
         style={ menuContainerStyle }
       >
         <div
+          role="presentation"
+          className="dropdown-menu-inner"
           ref={ ref => this.menu = ref }
-          role="menu"
-          tabIndex={ -1 }
-          className="Select-menu"
           id={ `${this._instancePrefix}-list` }
-          style={ menuStyle }
           onMouseDown={ this.handleMouseDownOnMenu }
+          style={ menuStyle }
         >
           {menuItems}
         </div>
-      </div>
+      </Dropdown.Menu>
     );
   }
   getFocusableOptionIndex = selectedOption => {
@@ -833,6 +835,8 @@ export default class Select extends React.Component {
       "is-disabled": disabled,
       "is-focused": isFocused,
       "is-open": isOpen,
+      "open": isOpen,
+      "dropup": isDropup,
       "is-dropup": isDropup,
       "is-pseudo-focused": isPseudoFocused,
       "is-searchable": searchable,
@@ -889,10 +893,7 @@ export default class Select extends React.Component {
             <span className="Select-arrow" />
           </span>
         </div>
-        {
-          isOpen ? this.renderMenuItems(options, valueArray, focusedOption) :
-            null
-        }
+        {this.renderMenuItems(options, valueArray, focusedOption)}
       </div>
     );
   }
